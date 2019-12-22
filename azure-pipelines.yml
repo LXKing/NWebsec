@@ -6,7 +6,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  dotnet_version_suffix: $(BuildID).$(SourceBranchName)
+  dotnet_version_suffix: '$(BuildID).$(SourceBranchName)'
 
 steps:
 - script: dotnet build NWebsec-CI.sln --configuration $(buildConfiguration)

@@ -40,14 +40,14 @@ steps:
 
 - task: NuGetAuthenticate@0
   condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
-  input:
+  inputs:
     nuGetServiceConnections: $(nugetConnection)
 
 - task: NuGetCommand@2
   condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
   inputs:
     command: push
-    packagesToPush: '$(Build.ArtifactStagingDirectory)*.nupkg'
+    arguments: '--skip-duplicate'
     nuGetFeedType: external
     publishFeedCredentials: $(nugetConnection)
     #versioningScheme: byEnvVar

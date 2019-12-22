@@ -40,16 +40,18 @@ steps:
 
 - task: NuGetAuthenticate@0
   condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
+  displayName: 'NuGet Auth'
   inputs:
     nuGetServiceConnections: $(nugetConnection)
 
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
+  displayName: 'NuGet push'
   inputs:
     command: push
     arguments: '--skip-duplicate'
     nuGetFeedType: external
-    publishFeedCredentials: $(nugetConnection)
+    externalEndPoint: $(nugetConnection)
     #versioningScheme: byEnvVar
     #versionEnvVar: version
 

@@ -12,11 +12,11 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: build
+    projects: '$(sln)'
     arguments: '--configuration $(buildConfiguration)'
-    projects: '$(sln)''
 
 - task: DotNetCoreCLI@2
   inputs:
     command: test
+    projects: $(sln)    
     arguments: '--configuration $(buildConfiguration)'
-    projects: $(sln)

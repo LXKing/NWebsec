@@ -6,7 +6,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-    sln: 'NWebsec-CI.sln'
+  sln: 'NWebsec-CI.sln'
 
 steps:
 - task: DotNetCoreCLI@2

@@ -22,10 +22,4 @@ steps:
     nobuild: true
     arguments: '--configuration $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  inputs: 
-    command: 'pack'
-    outputDir: '$(Build.ArtifactStagingDirectory)/nupkgs'
-    projects: $(sln)
-    nobuild: true
-    arguments: '--configuration $(buildConfiguration)'
+- script: dotnet pack $(sln) --configuration $(buildConfiguration) --no-build -o $(Build.ArtifactStagingDirectory)/nupkgs

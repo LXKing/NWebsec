@@ -3,21 +3,20 @@
 
 pool:
   vmImage: 'windows-latest'
-  sln: 'NWebsec-CI.sln'
 
 variables:
   buildConfiguration: 'Release'
-  dotnet_version_suffix: '$(Build.BuildID).$(Build.SourceBranchName)'
+    sln: 'NWebsec-CI.sln'
 
 steps:
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'build'
-    arguments: --configuration $(buildConfiguration)
-    projects: $(sln)
+    command: build
+    arguments: '--configuration $(buildConfiguration)'
+    projects: '$(sln)''
 
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'test'
-    arguments: --configuration $(buildConfiguration)
+    command: test
+    arguments: '--configuration $(buildConfiguration)'
     projects: $(sln)

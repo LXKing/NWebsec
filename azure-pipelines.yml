@@ -8,6 +8,7 @@ variables:
   buildConfiguration: 'Release'
   sln: 'NWebsec-CI.sln'
   versionSuffix: '' #overridden for branches before pack.
+  nugetConnection: 'NWebsec Nuget'
 
 steps:
 - task: DotNetCoreCLI@2
@@ -37,5 +38,19 @@ steps:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: nupkgs
 
+- task: NuGetAuthenticate@0
+  condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
+  input:
+    nuGetServiceConnections: $(nugetConnection)
+
+- task: NuGetCommand@2
+  condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
+  inputs:
+    command: push
+    packagesToPush: '$(Build.ArtifactStagingDirectory)*.nupkg'
+    nuGetFeedType: external
+    publishFeedCredentials: $(nugetConnection)
+    #versioningScheme: byEnvVar
+    #versionEnvVar: version
 
     #condition: (succeeded(),in($(Build.SourceBranchName), 'master', 'dev'))

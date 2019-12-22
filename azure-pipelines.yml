@@ -10,21 +10,31 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'Build'
   inputs:
     command: build
     projects: '$(sln)'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Test'
   inputs:
     command: test
     projects: $(sln)
     nobuild: true
     arguments: '--configuration $(buildConfiguration)'
 
-- script: dotnet pack $(sln) --configuration $(buildConfiguration) --no-build -o $(Build.ArtifactStagingDirectory)
+- script: echo "##vso[task.setvariable variable=versionSuffix]--version-suffix $(Build.BuildID).$(Build.SourceBranchName)"
+  condition: (succeeded(),ne($(Build.SourceBranchName),'master'))
+  displayName: 'Version suffix'
+
+- script: dotnet pack $(sln) --configuration $(buildConfiguration) --no-build -o $(Build.ArtifactStagingDirectory) $(versionSuffix)
+  displayName: 'Pack'
 
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: nupkgs
+
+
+    #condition: (succeeded(),in($(Build.SourceBranchName), 'master', 'dev'))

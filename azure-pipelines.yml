@@ -22,4 +22,9 @@ steps:
     nobuild: true
     arguments: '--configuration $(buildConfiguration)'
 
-- script: dotnet pack $(sln) --configuration $(buildConfiguration) --no-build -o $(Build.ArtifactStagingDirectory)/nupkgs
+- script: dotnet pack $(sln) --configuration $(buildConfiguration) --no-build -o $(Build.ArtifactStagingDirectory)
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: nupkgs

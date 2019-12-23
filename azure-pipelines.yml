@@ -42,7 +42,7 @@ steps:
   displayName: 'NuGet push'
   inputs:
     command: 'custom'
-    arguments: '-ApiKey $(nugetApiKey) -Source https://api.nuget.org/v3/index.json -SkipDuplicate'
+    arguments: '$(Build.ArtifactStagingDirectory)/*.nupkgs -ApiKey $(nugetApiKey) -Source https://api.nuget.org/v3/index.json -SkipDuplicate'
 
 #- task: DotNetCoreCLI@2
 #  condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))

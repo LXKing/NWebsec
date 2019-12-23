@@ -38,18 +38,11 @@ steps:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: nupkgs
 
-- task: NuGetAuthenticate@0
-  condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
-  displayName: 'NuGet Auth'
-  inputs:
-    nuGetServiceConnections: $(nugetConnection)
-
-
-
 - task: NuGetCommand@2
   displayName: 'NuGet push'
   inputs:
     command: 'push'
+    arguments: '-SkipDuplicate'
     feedsToUse: 'config'
     publishFeedCredentials: '$(nugetConnection)'
     includeNugetOrg: 'true'

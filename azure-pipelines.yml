@@ -41,11 +41,8 @@ steps:
 - task: NuGetCommand@2
   displayName: 'NuGet push'
   inputs:
-    command: 'push'
-    arguments: '-SkipDuplicate'
-    feedsToUse: 'config'
-    publishFeedCredentials: '$(nugetConnection)'
-    includeNugetOrg: 'true'
+    command: 'custom'
+    arguments: '-ApiKey $(nugetApiKey) -Source https://api.nuget.org/v3/index.json -SkipDuplicate'
 
 #- task: DotNetCoreCLI@2
 #  condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))

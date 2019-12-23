@@ -44,14 +44,24 @@ steps:
   inputs:
     nuGetServiceConnections: $(nugetConnection)
 
-- task: DotNetCoreCLI@2
-  condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
+
+
+- task: NuGetCommand@2
   displayName: 'NuGet push'
   inputs:
-    command: push
-    arguments: '--skip-duplicate'
-    nuGetFeedType: external
-    externalEndPoint: $(nugetConnection)
+    command: 'push'
+    feedsToUse: 'config'
+    publishFeedCredentials: '$(nugetConnection)'
+    includeNugetOrg: 'true'
+
+#- task: DotNetCoreCLI@2
+#  condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
+#  displayName: 'NuGet push'
+#  inputs:
+#    command: push
+#    arguments: '--skip-duplicate --api-key $(nugetApiKey)'
+#    nuGetFeedType: external
+#    externalEndPoint: $(nugetConnection)
     #versioningScheme: byEnvVar
     #versionEnvVar: version
 

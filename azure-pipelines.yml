@@ -44,7 +44,13 @@ steps:
     version: '3.1.x'
     packageType: sdk
 
+
+- script: 'dotnet nuget push $(Build.ArtifactStagingDirectory)\nupkgs\ -k $(nugetApiKey) -s https://api.nuget.org/v3/index.json --skip-duplicate'
+  condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
+  displayName: 'dotnet nuget push $(buildConfiguration)'
+
 - task: DotNetCoreCLI@2
+  enabled: 'false'
   condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
   displayName: 'dotnet nuget push'
   inputs:

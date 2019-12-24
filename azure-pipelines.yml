@@ -30,27 +30,19 @@ steps:
   condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'buildmaster'))
   displayName: 'Version suffix'
 
-- script: dotnet pack $(sln) --configuration $(buildConfiguration) --no-build -o $(Build.ArtifactStagingDirectory) $(versionSuffix)
+- script: dotnet pack $(sln) --configuration $(buildConfiguration) --no-build -o $(Build.ArtifactStagingDirectory)\nupkgs $(versionSuffix)
   displayName: 'Pack'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: nupkgs
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)\nupkgs'
+    artifactName: 'nwebsec-$(Build.BuildID)'
 
-#- task: NuGetToolInstaller@0
-#  inputs:
-#    checkLatest: true # Optional
-
-#- task: NuGetCommand@2
-#  displayName: 'NuGet push'
-#  inputs:
-#    command: 'custom'
-#    arguments: '$(Build.ArtifactStagingDirectory)\*.nupkgs -ApiKey $(nugetApiKey) -Source https://api.nuget.org/v3/index.json -SkipDuplicate'
 
 - task: DotNetCoreCLI@2
   condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
-  displayName: 'NuGet push'
+  displayName: 'dotnet nuget push'
   inputs:
-    command: push
-    arguments: '$(Build.ArtifactStagingDirectory)/*.nupkg --api-key $(nugetApiKey) --source https://api.nuget.org/v3/index.json --skip-duplicate'
+    command: custom 
+    custom: nuget push
+    arguments: '$(Build.ArtifactStagingDirectory)\nupkgs\ -k $(nugetApiKey) -s https://api.nuget.org/v3/index.json --skip-duplicate'

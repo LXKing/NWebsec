@@ -45,15 +45,15 @@ steps:
     packageType: sdk
 
 
-- script: 'dotnet nuget push $(Build.ArtifactStagingDirectory)\nupkgs\ -k $(nugetApiKey) -s https://api.nuget.org/v3/index.json --skip-duplicate'
+- script: 'dotnet nuget push '
+  enabled: 'false'
   condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
-  displayName: 'dotnet nuget push $(buildConfiguration)'
+  displayName: 'dotnet build $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  enabled: 'false'
   condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'buildmaster', 'azure-pipelines'))
   displayName: 'dotnet nuget push'
   inputs:
     command: custom 
-    custom: nuget push
-    arguments: '$(Build.ArtifactStagingDirectory)\nupkgs\ -k $(nugetApiKey) -s https://api.nuget.org/v3/index.json --skip-duplicate'
+    custom: nuget
+    arguments: 'push $(Build.ArtifactStagingDirectory)\nupkgs\ -k $(nugetApiKey) -s https://api.nuget.org/v3/index.json --skip-duplicate'

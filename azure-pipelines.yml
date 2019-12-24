@@ -11,6 +11,12 @@ variables:
   nugetConnection: 'NWebsec Nuget'
 
 steps:
+- task: UseDotNet@2 
+  displayName: ".NET Core 3.1.x"
+  inputs:
+    version: '3.1.x'
+    packageType: sdk
+
 - task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
@@ -37,12 +43,6 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)\nupkgs'
     artifactName: 'nwebsec-$(Build.BuildID)'
-
-- task: UseDotNet@2 
-  displayName: ".NET Core 3.1.x"
-  inputs:
-    version: '3.1.x'
-    packageType: sdk
 
 - task: DotNetCoreCLI@2
   condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'master', 'dev'))
